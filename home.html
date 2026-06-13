@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduMetrics </title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════
+   THEME VARIABLES
+═══════════════════════════════════════════ */
+:root {
+  --transition: 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+[data-theme="dark"] {
+  --bg:           #070d1a;
+  --bg2:          #0e1628;
+  --bg3:          #141f36;
+  --surface:      #111827;
+  --surface2:     #1a2540;
+  --border:       rgba(79,124,255,.13);
+  --border2:      rgba(79,124,255,.22);
+  --text:         #e8ecf8;
+  --text-muted:   #8493b8;
+  --text-dim:     #4a5578;
+
+  --accent:       #4f7cff;
+  --accent-glow:  rgba(79,124,255,.35);
+  --accent-soft:  rgba(79,124,255,.10);
+  --green:        #22d3a5;
+  --green-soft:   rgba(34,211,165,.10);
+  --yellow:       #ffc247;
+  --yellow-soft:  rgba(255,194,71,.10);
+  --red:          #ff6b6b;
+  --red-soft:     rgba(255,107,107,.10);
+  --purple:       #a78bfa;
+  --purple-soft:  rgba(167,139,250,.10);
+
+  --hero-grad: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79,124,255,.22) 0%, transparent 70%),
+               radial-gradient(ellipse 40% 40% at 80% 50%, rgba(34,211,165,.08) 0%, transparent 60%),
+               radial-gradient(ellipse 30% 30% at 10% 70%, rgba(167,139,250,.07) 0%, transparent 60%);
+
+  --card-shadow: 0 4px 24px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.3);
+  --card-shadow-hover: 0 8px 40px rgba(79,124,255,.18), 0 2px 8px rgba(0,0,0,.4);
+  --nav-bg: rgba(7,13,26,.85);
+  --nav-border: rgba(79,124,255,.12);
+}
+
+[data-theme="light"] {
+  --bg:           #f0f4ff;
+  --bg2:          #e8eeff;
+  --bg3:          #dde5ff;
+  --surface:      #ffffff;
+  --surface2:     #f5f7ff;
+  --border:       rgba(26,45,100,.10);
+  --border2:      rgba(26,45,100,.20);
+  --text:         #111827;
+  --text-muted:   #4a5578;
+  --text-dim:     #9aa3be;
+
+  --accent:       #3b6aff;
+  --accent-glow:  rgba(59,106,255,.20);
+  --accent-soft:  rgba(59,106,255,.08);
+  --green:        #0fb98a;
+  --green-soft:   rgba(15,185,138,.10);
+  --yellow:       #d99a00;
+  --yellow-soft:  rgba(217,154,0,.10);
+  --red:          #e04444;
+  --red-soft:     rgba(224,68,68,.08);
+  --purple:       #7c3aed;
+  --purple-soft:  rgba(124,58,237,.08);
+
+  --hero-grad: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59,106,255,.14) 0%, transparent 70%),
+               radial-gradient(ellipse 40% 40% at 80% 50%, rgba(15,185,138,.07) 0%, transparent 60%),
+               radial-gradient(ellipse 30% 30% at 10% 70%, rgba(124,58,237,.05) 0%, transparent 60%);
+
+  --card-shadow: 0 2px 16px rgba(26,45,100,.08), 0 1px 4px rgba(26,45,100,.05);
+  --card-shadow-hover: 0 8px 32px rgba(59,106,255,.14), 0 2px 8px rgba(26,45,100,.08);
+  --nav-bg: rgba(240,244,255,.88);
+  --nav-border: rgba(26,45,100,.10);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo-mark {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  transition: color .2s, background .2s;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: var(--accent-soft);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  width: 44px; height: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 999px;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition), border-color var(--transition);
+  flex-shrink: 0;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform var(--transition), background var(--transition);
+  box-shadow: 0 0 8px var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+}
+
+[data-theme="light"] .theme-toggle-thumb {
+  transform: translateX(20px);
+}
+
+.theme-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color var(--transition);
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-nav {
+  padding: 8px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .2s, box-shadow .2s, transform .15s;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.btn-nav:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px var(--accent-glow);
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  padding: 120px 32px 80px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--hero-grad);
+  pointer-events: none;
+  transition: background var(--transition);
+}
+
+/* Grid lines background */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 20%, transparent 80%);
+  transition: background-image var(--transition);
+}
+
+/* Floating orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: orb-float 8s ease-in-out infinite;
+}
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(79,124,255,.18) 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(34,211,165,.12) 0%, transparent 70%);
+  top: 100px; right: -50px;
+  animation-delay: -3s;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(167,139,250,.10) 0%, transparent 70%);
+  bottom: 50px; left: 30%;
+  animation-delay: -6s;
+}
+
+@keyframes orb-float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+[data-theme="light"] .orb-1 {
+  background: radial-gradient(circle, rgba(59,106,255,.10) 0%, transparent 70%);
+}
+[data-theme="light"] .orb-2 {
+  background: radial-gradient(circle, rgba(15,185,138,.08) 0%, transparent 70%);
+}
+[data-theme="light"] .orb-3 {
+  background: radial-gradient(circle, rgba(124,58,237,.06) 0%, transparent 70%);
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px 5px 7px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border2);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 24px;
+  animation: fade-up .6s ease both;
+}
+
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .7; transform: scale(1.3); }
+}
+
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(38px, 5vw, 58px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  color: var(--text);
+  margin-bottom: 20px;
+  animation: fade-up .7s .1s ease both;
+}
+
+.hero-h1 span {
+  background: linear-gradient(135deg, var(--accent) 0%, #7aa4ff 50%, var(--green) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-p {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 460px;
+  margin-bottom: 36px;
+  line-height: 1.75;
+  animation: fade-up .7s .2s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: fade-up .7s .3s ease both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .2s;
+  box-shadow: 0 4px 24px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--accent-glow);
+  opacity: .92;
+}
+
+.btn-primary svg { transition: transform .2s; }
+.btn-primary:hover svg { transform: translateX(3px); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .2s;
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 28px;
+  margin-top: 48px;
+  animation: fade-up .7s .4s ease both;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -.03em;
+}
+
+.hero-stat-num.blue { color: var(--accent); }
+.hero-stat-num.green { color: var(--green); }
+.hero-stat-num.yellow { color: var(--yellow); }
+
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.hero-divider {
+  width: 1px;
+  background: var(--border2);
+  align-self: stretch;
+}
+
+/* Hero right: Dashboard preview */
+.hero-visual {
+  position: relative;
+  animation: fade-up .8s .2s ease both;
+}
+
+.dashboard-preview {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow), 0 0 0 1px var(--border);
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  position: relative;
+}
+
+.dashboard-preview::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+}
+
+.dp-topbar {
+  padding: 16px 20px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background var(--transition);
+}
+
+.dp-dots { display: flex; gap: 5px; }
+.dp-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.dp-dot:nth-child(1) { background: #ff6b6b; }
+.dp-dot:nth-child(2) { background: #ffc247; }
+.dp-dot:nth-child(3) { background: #22d3a5; }
+
+.dp-url {
+  flex: 1;
+  background: var(--bg3);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: monospace;
+  transition: background var(--transition);
+}
+
+.dp-body { padding: 16px; }
+
+.dp-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.dp-kpi {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.dp-kpi-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.dp-kpi-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.dp-kpi-change {
+  font-size: 8px;
+  margin-top: 3px;
+}
+.up { color: var(--green); }
+.dn { color: var(--red); }
+
+.dp-charts {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.dp-chart-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.dp-chart-title {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* Mini line chart */
+.mini-line {
+  position: relative;
+  height: 50px;
+  overflow: hidden;
+}
+
+.mini-line svg { width: 100%; height: 100%; }
+
+/* Mini donut */
+.mini-donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.donut-svg { width: 60px; height: 60px; }
+
+.donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.donut-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.donut-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dp-table-row {
+  display: grid;
+  grid-template-columns: 1fr 50px 50px 45px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 9px;
+  color: var(--text-muted);
+  transition: background .15s;
+}
+
+.dp-table-row:hover { background: var(--accent-soft); }
+
+.dp-table-header {
+  display: grid;
+  grid-template-columns: 1fr 50px 50px 45px;
+  padding: 4px 10px;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.dp-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.dp-tag.pass { background: var(--green-soft); color: var(--green); }
+.dp-tag.risk { background: var(--yellow-soft); color: var(--yellow); }
+.dp-tag.fail { background: var(--red-soft); color: var(--red); }
+
+/* Floating badge on preview */
+.preview-badge {
+  position: absolute;
+  top: -16px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--card-shadow);
+  animation: float-badge 4s ease-in-out infinite;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.preview-badge-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: var(--green-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.preview-badge-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.preview-badge-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.preview-badge2 {
+  position: absolute;
+  bottom: -14px;
+  left: 20px;
+  animation-delay: -2s;
+}
+
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   SECTION SHARED
+═══════════════════════════════════════════ */
+section {
+  padding: 100px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.section-h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.12;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.section-p {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 300;
+  max-width: 520px;
+  line-height: 1.75;
+}
+
+/* ═══════════════════════════════════════════
+   STATS BAND
+═══════════════════════════════════════════ */
+.stats-band {
+  padding: 0 32px 0;
+}
+
+.stats-band-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 40px 60px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 0;
+  justify-content: center;
+  box-shadow: var(--card-shadow);
+  transition: background var(--transition), border-color var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-band-inner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--green), var(--yellow), var(--purple));
+}
+
+.sb-stat {
+  padding: 22px 0;
+  text-align: center;
+  position: relative;
+}
+
+.sb-icon {
+  font-size: 22px;
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(79,124,255,.08);
+  margin: 0 auto 12px;
+}
+
+.sb-stat:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10%; right: 0;
+  height: 80%;
+  width: 1px;
+  background: var(--border2);
+}
+
+.sb-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sb-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sb-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ═══════════════════════════════════════════
+   FEATURES
+═══════════════════════════════════════════ */
+.features-section {
+  padding: 100px 32px;
+}
+
+.features-section .section-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 64px;
+}
+
+.features-section .section-p { margin: 0 auto; text-align: center; }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: transparent;
+  transition: background .3s;
+}
+
+.feature-card:hover {
+  border-color: var(--border2);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-4px);
+}
+
+.feature-card:hover::before {
+  background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+}
+
+.feature-card.large {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  transition: transform .2s;
+}
+
+.feature-card:hover .feature-icon { transform: scale(1.08); }
+
+.fi-blue { background: var(--accent-soft); }
+.fi-green { background: var(--green-soft); }
+.fi-yellow { background: var(--yellow-soft); }
+.fi-purple { background: var(--purple-soft); }
+.fi-red { background: var(--red-soft); }
+
+.feature-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -.02em;
+}
+
+.feature-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.feature-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.ftag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--border2);
+}
+
+/* Mini chart in feature card */
+.feature-mini-chart {
+  background: var(--bg2);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.mini-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 80px;
+}
+
+.mbar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  transition: opacity .2s;
+}
+.mbar:hover { opacity: .8; }
+
+.mini-labels {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.mlabel {
+  flex: 1;
+  text-align: center;
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+.mini-score-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mini-score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.msr-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.msr-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--bg3);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+
+.msr-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .8s ease;
+}
+
+.msr-val {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 25px;
+  text-align: right;
+}
+
+/* ═══════════════════════════════════════════
+   TECH STACK
+═══════════════════════════════════════════ */
+.tech-section {
+  padding: 0 32px 100px;
+}
+
+.tech-section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: all .25s;
+  cursor: default;
+}
+
+.tech-card:hover {
+  border-color: var(--border2);
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-3px);
+}
+
+.tech-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.tech-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.tech-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════
+   WORKFLOW
+═══════════════════════════════════════════ */
+.workflow-section {
+  padding: 0 32px 100px;
+}
+
+.workflow-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 56px;
+  position: relative;
+}
+
+.workflow-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px; left: calc(12.5%);
+  right: calc(12.5%);
+  height: 2px;
+  background: linear-gradient(90deg, var(--border2), var(--accent), var(--green), var(--border2));
+}
+
+.wf-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+}
+
+.wf-num {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  transition: all .25s;
+}
+
+.wf-step:hover .wf-num {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.wf-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.wf-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   CTA
+═══════════════════════════════════════════ */
+.cta-section {
+  padding: 0 32px 120px;
+}
+
+.cta-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cta-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 28px;
+  padding: 80px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.cta-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 100%, var(--accent-soft) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--green), transparent);
+}
+
+.cta-card .section-h2 {
+  font-size: clamp(28px, 3.5vw, 44px);
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+
+.cta-card .section-p {
+  max-width: 480px;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+
+.cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 32px;
+  transition: border-color var(--transition);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-logo span { color: var(--accent); }
+
+.footer-copy {
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-link {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.footer-link:hover { color: var(--accent); }
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+.w100 { width: 100%; }
+
+/* Scroll animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+.reveal-delay-4 { transition-delay: .4s; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-mark">E</div>
+      Edu<span>Metrics</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#tech" class="nav-link">Stack</a>
+      <a href="#workflow" class="nav-link">How It Works</a>
+    </div>
+    <div class="nav-right">
+      <span class="theme-label" onclick="toggleTheme()" id="themeLabel">Light Mode</span>
+      <div class="theme-toggle" onclick="toggleTheme()" role="button" aria-label="Toggle theme">
+        <div class="theme-toggle-thumb">
+          <span id="themeIcon">☀</span>
+        </div>
+      </div>
+      <a href="auth.html" class="btn-nav" id="signInNavBtn">Sign In →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Auth Dropdown Overlay (close on outside click) -->
+<div id="authDropOverlay" style="display:none;position:fixed;inset:0;z-index:90" onclick="closeAuthDrop()"></div>
+
+<!-- ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ -->
+<section class="hero" style="padding: 120px 32px 100px; max-width: none;">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-inner">
+    <!-- Left -->
+    <div class="hero-left">
+      <h1 class="hero-h1">
+        Smart Student<br>
+        <span>Performance</span><br>
+        Analytics
+      </h1>
+
+      <p class="hero-p">
+        A full-stack academic management platform built with Python Flask. Track grades, monitor attendance, generate reports, and identify at-risk students all in one elegant dashboard.
+      </p>
+
+      <div class="hero-actions">
+        <a href="auth.html" class="btn-primary">
+          Get Started
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#features" class="btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Explore Features
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div id="heroStudents" class="hero-stat-num blue">0</div>
+          <div class="hero-stat-label">Students Tracked</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <div id="heroPassRate" class="hero-stat-num green">0%</div>
+          <div class="hero-stat-label">Pass Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Dashboard Preview -->
+    <div class="hero-visual">
+      <!-- Floating badge top -->
+      <div class="preview-badge">
+        <div class="preview-badge-icon">📈</div>
+        <div>
+          <div class="preview-badge-text">Class Average</div>
+          <div class="preview-badge-sub">74.3 — up 3.1 from last term</div>
+        </div>
+      </div>
+
+      <div class="dashboard-preview">
+        <!-- Browser chrome -->
+        <div class="dp-topbar">
+          <div class="dp-dots">
+            <div class="dp-dot"></div>
+            <div class="dp-dot"></div>
+            <div class="dp-dot"></div>
+          </div>
+          <div class="dp-url">localhost:5000/dashboard</div>
+        </div>
+
+        <div class="dp-body">
+          <!-- KPI Row -->
+          <div class="dp-kpis">
+            <div class="dp-kpi">
+              <div class="dp-kpi-label">Students</div>
+              <div class="dp-kpi-value" style="color:var(--accent)">248</div>
+              <div class="dp-kpi-change up">▲ +12</div>
+            </div>
+            <div class="dp-kpi">
+              <div class="dp-kpi-label">Avg Score</div>
+              <div class="dp-kpi-value" style="color:var(--green)">74.3</div>
+              <div class="dp-kpi-change up">▲ +3.1</div>
+            </div>
+            <div class="dp-kpi">
+              <div class="dp-kpi-label">At Risk</div>
+              <div class="dp-kpi-value" style="color:var(--yellow)">23</div>
+              <div class="dp-kpi-change dn">▼ -5</div>
+            </div>
+            <div class="dp-kpi">
+              <div class="dp-kpi-label">Pass Rate</div>
+              <div class="dp-kpi-value" style="color:var(--purple)">91%</div>
+              <div class="dp-kpi-change up">▲ +2%</div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="dp-charts">
+            <div class="dp-chart-card">
+              <div class="dp-chart-title">Score Trends</div>
+              <div class="mini-line">
+                <svg viewBox="0 0 200 50" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#4f7cff" stop-opacity=".3"/>
+                      <stop offset="100%" stop-color="#4f7cff" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,35 L17,32 L34,34 L51,28 L68,30 L85,25 L102,27 L119,22 L136,24 L153,18 L170,20 L187,15 L200,13" fill="none" stroke="#4f7cff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M0,35 L17,32 L34,34 L51,28 L68,30 L85,25 L102,27 L119,22 L136,24 L153,18 L170,20 L187,15 L200,13 L200,50 L0,50 Z" fill="url(#lineGrad)"/>
+                </svg>
+              </div>
+            </div>
+            <div class="dp-chart-card">
+              <div class="dp-chart-title">Grade Dist.</div>
+              <div class="mini-donut">
+                <svg class="donut-svg" viewBox="0 0 60 60">
+                  <circle cx="30" cy="30" r="22" fill="none" stroke="#1a2540" stroke-width="10"/>
+                  <circle cx="30" cy="30" r="22" fill="none" stroke="#22d3a5" stroke-width="10" stroke-dasharray="35 103" stroke-dashoffset="0" transform="rotate(-90 30 30)"/>
+                  <circle cx="30" cy="30" r="22" fill="none" stroke="#4f7cff" stroke-width="10" stroke-dasharray="42 103" stroke-dashoffset="-35" transform="rotate(-90 30 30)"/>
+                  <circle cx="30" cy="30" r="22" fill="none" stroke="#ffc247" stroke-width="10" stroke-dasharray="18 103" stroke-dashoffset="-77" transform="rotate(-90 30 30)"/>
+                  <circle cx="30" cy="30" r="22" fill="none" stroke="#ff6b6b" stroke-width="10" stroke-dasharray="8 103" stroke-dashoffset="-95" transform="rotate(-90 30 30)"/>
+                </svg>
+                <div class="donut-legend">
+                  <div class="donut-item"><div class="donut-dot" style="background:#4f7cff"></div>Grade B</div>
+                  <div class="donut-item"><div class="donut-dot" style="background:#22d3a5"></div>Grade A</div>
+                  <div class="donut-item"><div class="donut-dot" style="background:#ffc247"></div>Grade C</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Preview -->
+          <div class="dp-table-header">
+            <span>Student</span><span>Class</span><span>Avg</span><span>Status</span>
+          </div>
+          <div class="dp-table-row">
+            <span style="color:var(--text);font-weight:500">Arif Rahman</span>
+            <span>10A</span>
+            <span style="color:var(--green);font-weight:600">87</span>
+            <span><span class="dp-tag pass">Pass</span></span>
+          </div>
+          <div class="dp-table-row">
+            <span style="color:var(--text);font-weight:500">Nadia Islam</span>
+            <span>11B</span>
+            <span style="color:var(--yellow);font-weight:600">52</span>
+            <span><span class="dp-tag risk">Risk</span></span>
+          </div>
+          <div class="dp-table-row">
+            <span style="color:var(--text);font-weight:500">Karim Hossain</span>
+            <span>10B</span>
+            <span style="color:var(--accent);font-weight:600">78</span>
+            <span><span class="dp-tag pass">Pass</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating badge bottom -->
+      <div class="preview-badge preview-badge2">
+        <div class="preview-badge-icon" style="background:var(--accent-soft);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <!-- Student Group Illustration -->
+          <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Left Student Head -->
+            <circle cx="25" cy="20" r="8" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+            <!-- Left Student Body -->
+            <path d="M25 28 L20 50 M25 28 L30 50 M20 35 L15 50 M30 35 L35 50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            
+            <!-- Center Student Head (taller) -->
+            <circle cx="50" cy="15" r="9" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+            <!-- Center Student Body -->
+            <path d="M50 24 L45 55 M50 24 L55 55 M45 32 L40 55 M55 32 L60 55" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <!-- Center Student Book -->
+            <rect x="43" y="32" width="14" height="12" fill="none" stroke="currentColor" stroke-width="1.5" rx="1"/>
+            
+            <!-- Right Student Head -->
+            <circle cx="75" cy="22" r="7.5" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+            <!-- Right Student Body -->
+            <path d="M75 29.5 L70 50 M75 29.5 L80 50 M70 36 L65 50 M80 36 L85 50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            
+            <!-- Decorative Base/Classroom -->
+            <line x1="15" y1="60" x2="85" y2="60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="30" cy="68" r="3" fill="currentColor" opacity="0.6"/>
+            <circle cx="50" cy="70" r="3" fill="currentColor" opacity="0.6"/>
+            <circle cx="70" cy="68" r="3" fill="currentColor" opacity="0.6"/>
+          </svg>
+        </div>
+        <div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+   STATS BAND
+═══════════════════════════════════════ -->
+<div class="stats-band">
+  <div class="stats-band-inner reveal">
+    <div class="sb-stat">
+      <span class="sb-icon">📊</span>
+      <div class="sb-num">7</div>
+      <div class="sb-label">Dashboard Modules</div>
+    </div>
+    <div class="sb-stat">
+      <span class="sb-icon">⚡</span>
+      <div class="sb-num">100%</div>
+      <div class="sb-label">Real-time Updates</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   FEATURES
+═══════════════════════════════════════ -->
+<div class="features-section" id="features">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="section-header reveal" style="text-align:center;max-width:600px;margin:0 auto 64px">
+      <h2 class="section-h2">Everything you need to manage student performance</h2>
+      <p class="section-p" style="text-align:center;margin:0 auto">From grade entry to deep analytics — EduMetrics gives educators a complete toolkit for academic management.</p>
+    </div>
+
+    <div class="features-grid">
+
+      <!-- Large card: Grade Analytics -->
+      <div class="feature-card large reveal">
+        <div>
+          <div class="feature-icon fi-blue">📈</div>
+          <div class="feature-name">Smart Analytics</div>
+          <div class="feature-desc">Visualise performance trends across months, compare subject-wise averages, and track class rankings through interactive Chart.js visualisations.</div>
+          <div class="feature-tags">
+            <span class="ftag">Score Trends</span>
+            <span class="ftag">Grade Distribution</span>
+            <span class="ftag">Radar Chart</span>
+          </div>
+        </div>
+        <div class="feature-mini-chart">
+          <div style="font-size:10px;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em">Subject Averages</div>
+          <div class="mini-score-list">
+            <div class="mini-score-row">
+              <div class="msr-label">Math</div>
+              <div class="msr-bar-wrap"><div class="msr-bar" style="width:76%;background:#4f7cff"></div></div>
+              <div class="msr-val">76</div>
+            </div>
+            <div class="mini-score-row">
+              <div class="msr-label">Science</div>
+              <div class="msr-bar-wrap"><div class="msr-bar" style="width:71%;background:#22d3a5"></div></div>
+              <div class="msr-val">71</div>
+            </div>
+            <div class="mini-score-row">
+              <div class="msr-label">English</div>
+              <div class="msr-bar-wrap"><div class="msr-bar" style="width:68%;background:#ffc247"></div></div>
+              <div class="msr-val">68</div>
+            </div>
+            <div class="mini-score-row">
+              <div class="msr-label">History</div>
+              <div class="msr-bar-wrap"><div class="msr-bar" style="width:63%;background:#a78bfa"></div></div>
+              <div class="msr-val">63</div>
+            </div>
+            <div class="mini-score-row">
+              <div class="msr-label">Geography</div>
+              <div class="msr-bar-wrap"><div class="msr-bar" style="width:74%;background:#ff6b6b"></div></div>
+              <div class="msr-val">74</div>
+            </div>
+            <div class="mini-score-row">
+              <div class="msr-label">Art</div>
+              <div class="msr-bar-wrap"><div class="msr-bar" style="width:81%;background:#22d3a5"></div></div>
+              <div class="msr-val">81</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade Entry -->
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon fi-green">✏️</div>
+        <div class="feature-name">Grade Entry System</div>
+        <div class="feature-desc">Search students by name or ID and enter scores for all 6 subjects with a live preview of grade, average, and pass/fail status.</div>
+        <div class="feature-tags">
+          <span class="ftag">Live Preview</span>
+          <span class="ftag">Auto-grade</span>
+        </div>
+      </div>
+
+      <!-- Attendance -->
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon fi-yellow">📅</div>
+        <div class="feature-name">Attendance Tracking</div>
+        <div class="feature-desc">Visual calendar view for April 2025 with present, absent, and holiday markers — plus per-class attendance donut charts.</div>
+        <div class="feature-tags">
+          <span class="ftag">Calendar Grid</span>
+          <span class="ftag">Class Stats</span>
+        </div>
+      </div>
+
+      <!-- Large card: Reports + Students -->
+      <div class="feature-card reveal">
+        <div class="feature-icon fi-purple">📋</div>
+        <div class="feature-name">Report Generation</div>
+        <div class="feature-desc">One-click merit lists, at-risk student reports, attendance summaries, subject analyses, and official transcripts — ready for PDF export.</div>
+        <div class="feature-tags">
+          <span class="ftag">Merit List</span>
+          <span class="ftag">At-Risk</span>
+          <span class="ftag">Transcripts</span>
+        </div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon fi-red">👥</div>
+        <div class="feature-name">Student Profiles</div>
+        <div class="feature-desc">Full per-student profiles with radar charts, rank, subject breakdown, and status badge. Add new students via backend API instantly.</div>
+        <div class="feature-tags">
+          <span class="ftag">Profile Modal</span>
+          <span class="ftag">REST API</span>
+        </div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon fi-blue">🎯</div>
+        <div class="feature-name">At-Risk Alerts</div>
+        <div class="feature-desc">Automatic detection of failing and borderline students with status badges — enabling early intervention before final exams.</div>
+        <div class="feature-tags">
+          <span class="ftag">Pass / Risk / Fail</span>
+          <span class="ftag">Grades A–F</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   TECH STACK
+═══════════════════════════════════════ -->
+<div class="tech-section" id="tech">
+  <div class="tech-section-inner">
+    <div class="reveal" style="max-width:520px">
+      <h2 class="section-h2">Built with modern, production-grade tools</h2>
+      <p class="section-p">A clean full-stack architecture that separates concerns — Python handles data and business logic while vanilla JS delivers a fast, reactive frontend.</p>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <span class="tech-icon">🐍</span>
+        <div class="tech-name">Python Flask</div>
+        <div class="tech-desc">RESTful API backend</div>
+      </div>
+      <div class="tech-card reveal reveal-delay-1">
+        <span class="tech-icon">🗄️</span>
+        <div class="tech-name">SQLite + SQLAlchemy</div>
+        <div class="tech-desc">Persistent data storage</div>
+      </div>
+      <div class="tech-card reveal reveal-delay-2">
+        <span class="tech-icon">📊</span>
+        <div class="tech-name">Chart.js</div>
+        <div class="tech-desc">Interactive data viz</div>
+      </div>
+      <div class="tech-card reveal reveal-delay-3">
+        <span class="tech-icon">🎨</span>
+        <div class="tech-name">Vanilla CSS/JS</div>
+        <div class="tech-desc">Zero-framework frontend</div>
+      </div>
+      <div class="tech-card reveal reveal-delay-4">
+        <span class="tech-icon">🔤</span>
+        <div class="tech-name">Syne + DM Sans</div>
+        <div class="tech-desc">Precision typography</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   WORKFLOW
+═══════════════════════════════════════ -->
+<div class="workflow-section" id="workflow">
+  <div class="workflow-inner">
+    <div class="reveal" style="text-align:center;max-width:560px;margin:0 auto">
+      <h2 class="section-h2">From data entry to actionable insight</h2>
+    </div>
+
+    <div class="workflow-steps">
+      <div class="wf-step reveal">
+        <div class="wf-num">01</div>
+        <div class="wf-title">Add Students</div>
+        <div class="wf-desc">Register students via the modal form — data is instantly persisted to the SQLite database through the Flask API.</div>
+      </div>
+      <div class="wf-step reveal reveal-delay-1">
+        <div class="wf-num">02</div>
+        <div class="wf-title">Enter Grades</div>
+        <div class="wf-desc">Use the Grade Entry panel to input scores for all 6 subjects. Averages and letter grades are auto-calculated server-side.</div>
+      </div>
+      <div class="wf-step reveal reveal-delay-2">
+        <div class="wf-num">03</div>
+        <div class="wf-title">Analyse Results</div>
+        <div class="wf-desc">Explore the Analytics and Attendance modules to identify patterns, flag at-risk students, and compare class performance.</div>
+      </div>
+      <div class="wf-step reveal reveal-delay-3">
+        <div class="wf-num">04</div>
+        <div class="wf-title">Export Reports</div>
+        <div class="wf-desc">Generate merit lists, at-risk reports, and official transcripts, then export them as PDF for administration or parents.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   CTA
+═══════════════════════════════════════ -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-card reveal">
+      <h2 class="section-h2">Start managing your students today</h2>
+      <p class="section-p">Open the dashboard, add your students, and let EduMetrics handle the analytics — so you can focus on teaching.</p>
+      <div class="cta-actions">
+        <a href="auth.html" class="btn-primary" style="font-size:16px;padding:14px 32px">
+          Get Started — Sign Up Free
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="auth.html" class="btn-ghost" style="font-size:16px;padding:14px 28px">Sign In</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      Edu<span>Metrics</span> — Performance System
+    </div>
+    <div class="footer-copy">© 2025 EduMetrics. Academic analysis platform.</div>
+    <div class="footer-links">
+      <a href="auth.html" class="footer-link">Sign In</a>
+      <a href="#features" class="footer-link">Features</a>
+      <a href="#tech" class="footer-link">Stack</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════
+   AUTH CHECK — redirect if already logged in
+═══════════════════════════════════════ */
+(async function() {
+  try {
+    const res = await fetch('/api/me');
+    if (res.ok) {
+      const data = await res.json();
+      // Already logged in — update nav button
+      const btn = document.getElementById('signInNavBtn');
+      if (btn) {
+        btn.textContent = 'Dashboard →';
+        btn.href = '/dashboard';
+      }
+      // Also update hero/CTA buttons
+      document.querySelectorAll('a[href="auth.html"]').forEach(a => {
+        if (a.textContent.includes('Get Started') || a.textContent.includes('Sign Up')) {
+          a.textContent = '';
+          a.innerHTML = 'Go to Dashboard <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+          a.href = '/dashboard';
+        }
+      });
+    }
+  } catch(e) { /* not logged in */ }
+})();
+
+/* ═══════════════════════════════════════
+   THEME TOGGLE
+═══════════════════════════════════════ */
+const html = document.documentElement;
+const themeLabel = document.getElementById('themeLabel');
+const themeIcon  = document.getElementById('themeIcon');
+
+const savedTheme = localStorage.getItem('edumetrics-theme') || 'dark';
+html.setAttribute('data-theme', savedTheme);
+updateThemeUI(savedTheme);
+
+function toggleTheme() {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('edumetrics-theme', next);
+  updateThemeUI(next);
+}
+
+function updateThemeUI(theme) {
+  if (theme === 'dark') {
+    themeLabel.textContent = 'Light Mode';
+    themeIcon.textContent  = '☀';
+  } else {
+    themeLabel.textContent = 'Dark Mode';
+    themeIcon.textContent  = '🌙';
+  }
+}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+async function loadHomeStats() {
+  try {
+    const res = await fetch('/api/stats');
+    if (!res.ok) return;
+    const data = await res.json();
+    document.getElementById('heroStudents').textContent = data.students_tracked;
+    document.getElementById('heroPassRate').textContent = `${data.pass_rate}%`;
+    document.getElementById('heroSubjects').textContent = data.subjects;
+  } catch (e) {
+    console.warn('Failed to load home stats', e);
+  }
+}
+
+loadHomeStats();
+
+/* ═══════════════════════════════════════
+   SMOOTH NAV
+═══════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>

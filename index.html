@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Edu<span>Metrics</span></div>
+    <div class="logo-sub">Performance System</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" data-view="dashboard" onclick="navigate('dashboard', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" data-view="students" onclick="navigate('students', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Students
+      <span class="nav-badge">0</span>
+    </div>
+    <div class="nav-section-label">Academics</div>
+    <div class="nav-item" data-view="grades" onclick="navigate('grades', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Grade Entry
+    </div>
+    <div class="nav-item" data-view="analytics" onclick="navigate('analytics', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Analytics
+    </div>
+    <div class="nav-item" data-view="attendance" onclick="navigate('attendance', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Attendance
+    </div>
+    <div class="nav-section-label">Output</div>
+    <div class="nav-item" data-view="reports" onclick="navigate('reports', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Reports
+    </div>
+    <div class="nav-item" data-view="settings" onclick="navigate('settings', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Settings
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-card" id="sidebarUserCard" onclick="openUserProfile()" title="View My Profile">
+      <div class="avatar" id="sidebarAvatar">??</div>
+      <div style="flex:1;min-width:0">
+        <div class="user-name" id="sidebarName">Loading…</div>
+        <div class="user-role" id="sidebarRole">—</div>
+      </div>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-dim);flex-shrink:0"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    </div>
+    <button class="logout-btn" onclick="logoutUser()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="page-title" id="pageTitle">Dashboard</div>
+    <div class="topbar-actions">
+      <div class="search-box" style="position:relative">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search students…" id="globalSearch" oninput="handleSearch(this.value)" autocomplete="off">
+        <div id="globalSearchResults" style="display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);box-shadow:0 8px 32px rgba(0,0,0,.35);z-index:200;max-height:320px;overflow-y:auto"></div>
+      </div>
+      <button class="theme-btn" id="dashThemeBtn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+      <div class="teacher-only" id="topbarAddStudentWrap">
+        <button class="btn btn-primary" id="addStudentBtn" onclick="openAddStudentModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Student
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- ── DASHBOARD VIEW ── -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card" style="--card-accent: var(--accent)">
+          <div class="stat-label">Total Students</div>
+          <div class="stat-value" id="statTotal"></div>
+          <div class="stat-change up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          </div>
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--green)">
+          <div class="stat-label">Class Average</div>
+          <div class="stat-value" style="color:var(--green)" id="statAvg">—</div>
+          <div class="stat-change up" id="statAvgChange">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span id="statAvgChangeText">No data yet</span>
+          </div>
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--yellow)">
+          <div class="stat-label">At Risk</div>
+          <div class="stat-value" style="color:var(--yellow)" id="statRisk">0</div>
+          <div class="stat-change down" id="statRiskChange">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            <span id="statRiskChangeText">Students at risk</span>
+          </div>
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--red)">
+          <div class="stat-label">Pass Rate</div>
+          <div class="stat-value" style="color:var(--accent2)" id="statPass">—</div>
+          <div class="stat-change up" id="statPassChange">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span id="statPassChangeText">No data yet</span>
+          </div>
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Score Trends</div>
+              <div class="card-sub">Monthly average across all subjects</div>
+            </div>
+            <div class="chip-tabs" style="margin:0">
+              <div class="chip-tab active" onclick="switchTrendTab(this,'monthly')">Monthly</div>
+              <div class="chip-tab" onclick="switchTrendTab(this,'weekly')">Weekly</div>
+            </div>
+          </div>
+          <canvas id="trendChart" height="100"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Grade Distribution</div>
+              <div class="card-sub">Current semester</div>
+            </div>
+          </div>
+          <canvas id="gradeChart" height="160"></canvas>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Students</div>
+              <div class="card-sub">Latest activity</div>
+            </div>
+            <button class="btn btn-ghost" onclick="navigate('students', document.querySelector('[data-view=students]'))">View all</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Score</th>
+                  <th>Grade</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Top Performers</div>
+              <div class="card-sub">This semester</div>
+            </div>
+          </div>
+          <div id="topPerformers"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STUDENTS VIEW ── -->
+    <div class="view" id="view-students">
+      <div class="page-header">
+        <div>
+          <div class="page-h1">All Students</div>
+          <div class="page-desc">Manage and track student academic profiles</div>
+        </div>
+        <div class="teacher-only">
+          <button class="btn btn-primary" onclick="openAddStudentModal()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Student
+          </button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <select class="filter-select" onchange="filterStudents()" id="filterGrade">
+          <option value="">All Grades</option>
+          <option value="A">Grade A</option>
+          <option value="B">Grade B</option>
+          <option value="C">Grade C</option>
+          <option value="D">Grade D</option>
+          <option value="F">Grade F</option>
+        </select>
+        <select class="filter-select" onchange="filterStudents()" id="filterStatus">
+          <option value="">All Status</option>
+          <option value="Pass">Passing</option>
+          <option value="At Risk">At Risk</option>
+          <option value="Fail">Failing</option>
+        </select>
+        <select class="filter-select" onchange="filterStudents()" id="filterClass">
+          <option value="">All Classes</option>
+          <option value="6A">Class 6A</option>
+          <option value="6B">Class 6B</option>
+          <option value="7A">Class 7A</option>
+          <option value="7B">Class 7B</option>
+          <option value="8A">Class 8A</option>
+          <option value="8B">Class 8B</option>
+          <option value="9A">Class 9A</option>
+          <option value="9B">Class 9B</option>
+          <option value="10A">Class 10A</option>
+          <option value="10B">Class 10B</option>
+          <option value="11A">Class 11A</option>
+          <option value="11B">Class 11B</option>
+          <option value="12A">Class 12A</option>
+          <option value="12B">Class 12B</option>
+        </select>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Math</th>
+                <th>Science</th>
+                <th>English</th>
+                <th>Avg Score</th>
+                <th>Grade</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="allStudentsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GRADE ENTRY VIEW ── -->
+    <div class="view" id="view-grades">
+      <div class="page-header">
+        <div>
+          <div class="page-h1">Grade Entry</div>
+          <div class="page-desc">Record and update student academic scores</div>
+        </div>
+      </div>
+
+      <!-- Student-only read-only notice -->
+      <div id="gradeReadonlyNotice" style="display:none;margin-bottom:18px">
+        <div style="background:rgba(79,124,255,.08);border:1px solid rgba(79,124,255,.2);border-radius:var(--radius-sm);padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text-muted)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          You are in <strong style="color:var(--accent);margin:0 4px">view-only</strong> mode. Only teachers can enter or edit grades.
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Enter / Update Scores</div>
+          </div>
+
+          <!-- Student search autocomplete -->
+          <div class="form-group" style="margin-bottom:16px;position:relative">
+            <label class="form-label">Search Student</label>
+            <input class="form-input" type="text" placeholder="Type name or ID…" id="gradeStudentSearch" oninput="onGradeStudentSearch(this.value)" autocomplete="off" id="gradeStudentSearch">
+            <div id="gradeSuggestions" style="position:absolute;left:0;right:0;top:100%;z-index:50;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);max-height:180px;overflow-y:auto;display:none;box-shadow:0 8px 24px rgba(0,0,0,.3)"></div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Student Name</label>
+              <input class="form-input" type="text" placeholder="Auto-filled" id="gradeStudentName" readonly style="background:var(--surface2);color:var(--text-muted)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Student ID</label>
+              <input class="form-input" type="text" placeholder="Auto-filled" id="gradeStudentId" readonly style="background:var(--surface2);color:var(--text-muted)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Class</label>
+              <input class="form-input" type="text" placeholder="Auto-filled" id="gradeClass" readonly style="background:var(--surface2);color:var(--text-muted)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Exam Type</label>
+              <select class="form-input" id="gradeExamType">
+                <option>Mid-Term</option><option>Final</option><option>Quiz</option><option>Assignment</option>
+              </select>
+            </div>
+          </div>
+          <div class="glow-line"></div>
+          <div class="form-label" style="margin-bottom:10px">Subject Scores (out of 100)</div>
+          <div class="subject-scores" id="gradeSubjectFields"></div>
+          <div class="teacher-only" style="margin-top:20px;display:flex;gap:10px" id="gradeFormButtons">
+            <button class="btn btn-primary" style="flex:1" onclick="submitGrades()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Save Grades
+            </button>
+            <button class="btn btn-ghost" onclick="clearGradeForm()">Clear</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Live Preview</div>
+          </div>
+          <div id="gradePreview">
+            <div class="empty-state" style="padding:40px 20px">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <h3>Search a student first</h3>
+              <p>Select a student above, then fill in scores to see a real-time performance summary.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS VIEW ── -->
+    <div class="view" id="view-analytics">
+      <div class="page-header">
+        <div>
+          <div class="page-h1">Analytics</div>
+          <div class="page-desc">Deep insights into student performance patterns</div>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Subject Performance Comparison</div></div>
+          <canvas id="subjectChart" height="140"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Subject Averages</div><div class="card-sub">Class-wide breakdown</div></div>
+          </div>
+          <div class="subject-list" id="subjectAvgList"></div>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Score Distribution</div></div>
+          <canvas id="distChart" height="130"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Class Performance Comparison</div></div>
+          <canvas id="classChart" height="130"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ATTENDANCE VIEW ── -->
+    <div class="view" id="view-attendance">
+      <div class="page-header">
+        <div>
+          <div class="page-h1">Attendance</div>
+          <div class="page-desc">April 2025 attendance overview</div>
+        </div>
+        <button class="btn btn-primary" onclick="markAttendance()">Mark Today</button>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Monthly Calendar — April 2025</div>
+            <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted);align-items:center">
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:3px;background:rgba(34,211,165,.25);display:inline-block"></span> Present</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:3px;background:rgba(255,90,90,.2);display:inline-block"></span> Absent</span>
+            </div>
+          </div>
+          <div class="att-grid" id="attCalendar"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Class Attendance Rate</div></div>
+          <canvas id="attChart" height="180"></canvas>
+          <div style="margin-top:16px">
+            <div class="subject-list" id="attList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REPORTS VIEW ── -->
+    <div class="view" id="view-reports">
+      <div class="page-header">
+        <div>
+          <div class="page-h1">Reports</div>
+          <div class="page-desc">Generate and export academic reports</div>
+        </div>
+      </div>
+      <div class="report-cards">
+        <div class="report-card" onclick="generateReport('Merit List')">
+          <div class="report-icon">🏆</div>
+          <div class="report-name">Merit List</div>
+          <div class="report-desc">Rank students by overall performance and generate printable merit list</div>
+        </div>
+        <div class="report-card" onclick="generateReport('Progress Report')">
+          <div class="report-icon">📈</div>
+          <div class="report-name">Progress Report</div>
+          <div class="report-desc">Detailed individual student progress reports for parent-teacher meetings</div>
+        </div>
+        <div class="report-card" onclick="generateReport('Attendance Report')">
+          <div class="report-icon">📅</div>
+          <div class="report-name">Attendance Report</div>
+          <div class="report-desc">Monthly and semester-wise attendance statistics by class</div>
+        </div>
+        <div class="report-card" onclick="generateReport('Subject Analysis')">
+          <div class="report-icon">📊</div>
+          <div class="report-name">Subject Analysis</div>
+          <div class="report-desc">Comparative analysis of subject-wise performance across all classes</div>
+        </div>
+        <div class="report-card" onclick="generateReport('At-Risk Students')">
+          <div class="report-icon">⚠️</div>
+          <div class="report-name">At-Risk Report</div>
+          <div class="report-desc">Identify and list students at risk of failing for early intervention</div>
+        </div>
+        <div class="report-card" onclick="generateReport('Transcript')">
+          <div class="report-icon">📋</div>
+          <div class="report-name">Transcripts</div>
+          <div class="report-desc">Official academic transcripts for individual students</div>
+        </div>
+      </div>
+      <div class="card" id="reportOutput" style="display:none">
+        <div class="card-header">
+          <div class="card-title" id="reportTitle"></div>
+          <button class="btn btn-ghost" onclick="exportReport()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export PDF
+          </button>
+        </div>
+        <div id="reportContent"></div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS VIEW ── -->
+    <div class="view" id="view-settings">
+      <div class="page-header">
+        <div>
+          <div class="page-h1">Settings</div>
+          <div class="page-desc">Configure system preferences and academic parameters</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Grading Scale</div>
+            <button class="btn btn-ghost" onclick="openGradingScaleEditor()">Edit / Add Scale</button>
+          </div>
+          <div class="grading-scale-summary" id="gradingScaleSummary">
+            <div class="scale-row">
+              <div><strong>A</strong> <span class="scale-meta">Excellent</span></div>
+              <div>90 – 100</div>
+            </div>
+            <div class="scale-row">
+              <div><strong>B</strong> <span class="scale-meta">Good</span></div>
+              <div>75 – 89</div>
+            </div>
+            <div class="scale-row">
+              <div><strong>C</strong> <span class="scale-meta">Average</span></div>
+              <div>60 – 74</div>
+            </div>
+            <div class="scale-row">
+              <div><strong>D</strong> <span class="scale-meta">Below Avg</span></div>
+              <div>45 – 59</div>
+            </div>
+            <div class="scale-row">
+              <div><strong>F</strong> <span class="scale-meta">Fail</span></div>
+              <div>Below 45</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Academic Year</div></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Current Year</label>
+              <input class="form-input" value="2024–2025">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Current Term</label>
+              <select class="form-input"><option>Second Term</option><option>First Term</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pass Mark</label>
+              <input class="form-input" type="number" value="45">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total Students</label>
+              <input class="form-input" value="248" readonly>
+            </div>
+            <div class="form-group full">
+              <button class="btn btn-primary" onclick="showToast('Settings saved successfully','success')">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Class Subjects</div>
+            <button class="btn btn-ghost" onclick="openSubjectSettings()">Edit Subjects</button>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Class</label>
+              <select class="form-input" id="subjectSettingsClassSummary" onchange="renderSubjectSettingsSummary()"></select>
+            </div>
+          </div>
+          <div class="grading-scale-summary" id="subjectSettingsListSummary"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── GRADING SCALE EDITOR MODAL ── -->
+<div class="modal-overlay" id="gradingScaleModal">
+  <div class="modal" style="width:620px;max-width:95vw">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Edit Grading Scale</div>
+        <div class="card-sub" style="margin-top:6px">Update the grade ranges or add new grading levels for the system.</div>
+      </div>
+      <div class="modal-close" onclick="closeModal('gradingScaleModal')">✕</div>
+    </div>
+    <div id="gradingScaleRows" class="form-grid"></div>
+    <button class="btn btn-ghost" onclick="addGradingScaleRow()" style="margin-top:10px">+ Add new grade</button>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+      <button class="btn btn-ghost" onclick="closeModal('gradingScaleModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveGradingScaleChanges()">Save grading scale</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CLASS SUBJECT SETTINGS MODAL ── -->
+<div class="modal-overlay" id="subjectSettingsModal">
+  <div class="modal" style="width:560px;max-width:95vw">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Edit Class Subjects</div>
+        <div class="card-sub" style="margin-top:6px">Configure subjects for each class and update the grade entry form.</div>
+      </div>
+      <div class="modal-close" onclick="closeModal('subjectSettingsModal')">✕</div>
+    </div>
+    <div class="form-grid" style="grid-template-columns:1.8fr auto;align-items:flex-end;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Class</label>
+        <select class="form-input" id="subjectSettingsClassModal" onchange="renderSubjectSettingsModal()"></select>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <button class="btn btn-primary" type="button" onclick="promptAddClassSubject()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;vertical-align:middle"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Subject
+        </button>
+      </div>
+    </div>
+    <div class="grading-scale-summary" id="subjectSettingsListModal"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+      <button class="btn btn-ghost" onclick="closeModal('subjectSettingsModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD STUDENT MODAL (2-STEP) ── -->
+<div class="modal-overlay" id="addStudentModal">
+  <div class="modal" style="width:560px;max-width:95vw">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="addModalTitle">Add New Student</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px" id="addModalSub">Step 1 of 2 — Student Information</div>
+      </div>
+      <div class="modal-close" onclick="closeModal('addStudentModal')">✕</div>
+    </div>
+
+    <!-- Step indicator -->
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:24px">
+      <div id="addStep1Dot" style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--accent)">
+        <div style="width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">1</div>
+        Student Info
+      </div>
+      <div style="flex:1;height:2px;background:var(--border);margin:0 10px;border-radius:1px" id="addStepLine"></div>
+      <div id="addStep2Dot" style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text-dim)">
+        <div id="addStep2Num" style="width:26px;height:26px;border-radius:50%;background:var(--surface2);color:var(--text-dim);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid var(--border)">2</div>
+        Grade Entry
+      </div>
+    </div>
+
+    <!-- STEP 1: Student info -->
+    <div id="addStudentStep1">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">First Name <span style="color:var(--red)">*</span></label>
+          <input class="form-input" placeholder="e.g. Arif" id="newFirst">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name <span style="color:var(--red)">*</span></label>
+          <input class="form-input" placeholder="e.g. Rahman" id="newLast">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Class <span style="color:var(--red)">*</span></label>
+          <select class="form-input" id="newClass">
+            <option>6A</option><option>6B</option><option>7A</option><option>7B</option>
+            <option>8A</option><option>8B</option><option>9A</option><option>9B</option>
+            <option>10A</option><option>10B</option><option>11A</option><option>11B</option>
+            <option>12A</option><option>12B</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <select class="form-input" id="newGender">
+            <option>Male</option><option>Female</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Attendance % (default 90)</label>
+          <input class="form-input" type="number" min="0" max="100" placeholder="90" id="newAttendance" value="90">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="btn btn-primary" style="flex:1" onclick="goToAddStep2()">
+          Next: Enter Grades
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:4px"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="btn btn-ghost" onclick="closeModal('addStudentModal')">Cancel</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Grade entry -->
+    <div id="addStudentStep2" style="display:none">
+      <!-- Summary chip -->
+      <div id="addNewStudentChip" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#4f7cff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff" id="addNewStudentInitials">??</div>
+        <div>
+          <div style="font-weight:600;font-size:13px" id="addNewStudentChipName">—</div>
+          <div style="font-size:11px;color:var(--text-muted)" id="addNewStudentChipClass">Class —</div>
+        </div>
+        <button onclick="backToAddStep1()" style="margin-left:auto;font-size:11px;color:var(--accent);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;border:1px solid rgba(79,124,255,.3)">← Edit Info</button>
+      </div>
+
+      <div class="form-label" style="margin-bottom:12px">Subject Scores <span style="font-size:11px;color:var(--text-dim)">(0 – 100, all required)</span></div>
+<div class="subject-scores" id="newStudentSubjectFields"></div>
+
+      <!-- Live mini-preview -->
+      <div id="addGradePreview" style="margin-top:16px;min-height:48px"></div>
+
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="btn btn-primary" style="flex:1" onclick="addStudent()" id="addStudentSubmitBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Student
+        </button>
+        <button class="btn btn-ghost" onclick="closeModal('addStudentModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── USER PROFILE MODAL ── -->
+<div class="modal-overlay" id="userProfileModal">
+  <div class="modal" style="width:500px">
+    <div class="modal-header">
+      <div class="modal-title">My Profile</div>
+      <div class="modal-close" onclick="closeModal('userProfileModal')">✕</div>
+    </div>
+    <div id="userProfileContent"></div>
+  </div>
+</div>
+
+<!-- ── STUDENT DETAIL PROFILE MODAL ── -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="profileModalTitle">Student Profile</div>
+      <div class="modal-close" onclick="closeModal('profileModal')">✕</div>
+    </div>
+    <div id="profileContent"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- JS -->
+<script src="script.js"></script>
+</body>
+</html>
